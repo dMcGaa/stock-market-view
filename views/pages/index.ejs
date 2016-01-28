@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>NodeJS Simple App</title>
-
-    <!-- CSS -->
-    <!-- load bootstrap and custom stylesheet -->
     <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/superhero/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="stylesheets/main.css">
+    <link rel="stylesheet" href="/stylesheets/main.css">
+    
+    <script type="text/javascript" src="/js/jquery-2.2.0.min.js"></script>
+    <script src="/js/chart.min.js"></script>
+    <script src="/js/stocks-view.js"></script>
 
 </head>
+
 <body>
 
-<div class="container">
-    <div class="jumbotron">
-        <h1 style = "font-size: 210%;">This Is Heroku Minimum!</h1>
-        <h2>Made using NodeJS, Express, EJS</h2>
-        <p><a href="https://github.com/dMcGaa/min-nodejs-heroku">GitHub</a></p>
-        <p style = "font-size: 80%;"><i>updated 2016-01-02</i></p>
+    <div class="container">
+        <div class="jumbotron">
+            <h1 style="font-size: 210%;">Stock Market View</h1>
+            <div id="canvas-holder">
+                <canvas id="chart-area" width="480" height="300" />
+            </div>
+        </div>
     </div>
-</div>
-    
+    <div align="center">
+        <div style="font-size: 80%;"><a href="https://github.com/dMcGaa/stock-market-view">GitHub: dMcGaa</a></div>
+    </div>
+
 </body>
+
 </html>
