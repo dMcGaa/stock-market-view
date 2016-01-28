@@ -3,10 +3,21 @@ $(document).ready(function() {
     var chartData = getChartData();
     var ctx = document.getElementById("chart-area").getContext("2d");
     window.myLineChart = new Chart(ctx).Line(chartData, {
-        	showScale: false,
+        	showScale: true,
+        	scaleGridLineColor:"rgba(200,200,200,.3)",
+        	scaleFontColor: "rgba(200,200,200,.3)",
         	pointDot : true,
+        	datasetFill:false,
             responsive: true  //responsive will fit window
         });
+    $("#add-data").on("click", function(){
+
+        // window.myLineChart.datasets[0].points[0].value = Math.random() * 100;  //B) this pair works
+        // window.myLineChart.update(); //B) this pair works
+        
+        // window.myLineChart.removeData();    //A) this pair works
+        // window.myLineChart.update();        //A) this pair works
+    })
 })
 
 function getChartData(){
