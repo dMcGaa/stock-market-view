@@ -6,6 +6,8 @@ $(document).ready(function() {
         	showScale: true,
         	scaleGridLineColor:"rgba(200,200,200,.3)",
         	scaleFontColor: "rgba(200,200,200,.3)",
+        	scaleLabel: "<%=value%>$",
+        	multiTooltipTemplate: "<%= datasetLabel %> - $<%= value %>",
         	pointDot : true,
         	datasetFill:false,
             responsive: true  //responsive will fit window
