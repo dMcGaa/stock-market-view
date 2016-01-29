@@ -1,6 +1,8 @@
 require('dotenv').load(); //for loading the .env variables that connect to the mongoDB
 var express = require('express');
 var app = express();
+var http = require("http").Server(app);
+var io = require("socket.io")(http);
 var MongoClient = require('mongodb').MongoClient,
   test = require('assert');  //for testing the DB connection
 var ObjectId = require('mongodb').ObjectId;  //referencing items by "_id" in DB
@@ -27,10 +29,24 @@ app.set('view engine', 'ejs');
 app.get('/', function(request, response) {
   response.render('pages/index');
 });
-
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+app.get('/socket/', function(request, response) {
+  response.render('pages/socket-test');
 });
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+    socket.on('disconnect', function(){
+    console.log('user disconnected');
+   });
+});
+
+http.listen(8080, function(){
+  console.log('listening on *:8080');
+});
+
+// app.listen(app.get('port'), function() {
+//   console.log('Node app is running on port', app.get('port'));
+// });
 
 
 
