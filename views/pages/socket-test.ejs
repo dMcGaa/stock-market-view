@@ -14,14 +14,26 @@
       #messages li:nth-child(odd) { background: #eee; }
     </style>
   </head>
+  <script type="text/javascript" src="/js/jquery-2.2.0.min.js"></script>
   <script src="/js/socket.io.js"></script>
+  <script src="/js/socket-test.js"></script>
 <script>
-  var socket = io();
+  // var socket = io();
+  // $("#testButton").on("click", function(){
+  //   alert("test");
+  //   socket.emit("chat message", "hello server");
+  // })
+  // $('#myForm').submit(function(){
+  //   socket.emit('chat message', $('#m').val());
+  //   $('#m').val('');
+  //   return false;
+  // });
 </script>
   <body>
     <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+    <form id="myForm" action="">
+      <input id="m" autocomplete="off" /><button id="sendBtn">Send</button>
     </form>
+    <button id="testButton">Test</button>
   </body>
 </html>
