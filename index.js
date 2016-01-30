@@ -49,6 +49,10 @@ io.on('connection', function(socket) {
     console.log('message: ' + msg);
     io.emit('chat message', msg);
   });
+  socket.on('track stock', function(msg) {
+    console.log('stock: ' + msg);
+    io.emit('new stock', msg);
+  });
 });
 
 http.listen(8080, function() {

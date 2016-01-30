@@ -1,5 +1,6 @@
 $(document).ready(function() {
     // var chartData = processData();
+    var socket = io();
     var chartData = getChartData();
     var ctx = document.getElementById("chart-area").getContext("2d");
     window.myLineChart = new Chart(ctx).Line(chartData, {
@@ -12,15 +13,19 @@ $(document).ready(function() {
         	datasetFill:false,
             responsive: true  //responsive will fit window
         });
-    $("#add-data").on("click", function(){
-
-        // window.myLineChart.datasets[0].points[0].value = Math.random() * 100;  //B) this pair works
-        // window.myLineChart.update(); //B) this pair works
-        
-        // window.myLineChart.removeData();    //A) this pair works
-        // window.myLineChart.update();        //A) this pair works
-    })
+  $('form').submit(function(){
+    socket.emit('track stock', $('#message-in').val());
+    $('#message-in').val('');
+    return false;
+  });
+  socket.on('new stock', function(stock){
+    addStockTicker(stock);
+  });
 })
+
+function addStockTicker(stock){
+    $('#stock-tickers').append($('<div>').text(stock));
+}
 
 function getChartData(){
     var data = {
