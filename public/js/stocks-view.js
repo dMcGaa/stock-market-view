@@ -21,27 +21,31 @@ $(document).ready(function() {
   socket.on('new stock', function(stock){
     addStockTicker(stock);
   });
+  $(document).on("click", ".stock-remove", function(){  //delegated event
+    //   alert("remove: " + this.id);
+      removeStockTickerFromDom(this.id);
+  });
 })
 
 function addStockTicker(stock){
     var stockTicker = document.createElement("div");
-    stockTicker.id = stock;
+    stockTicker.id = "stock-" + stock;
     stockTicker.innerHTML = stock;
-    stockTicker.style.display = "inline";
-    
-    var stockDelete = document.createElement("button");
+    stockTicker.className = "stock-item";
+
+    var stockDelete = document.createElement("span");
     stockDelete.id = "del-" + stock;
-    stockDelete.innerHTML = "del";
-    stockDelete.style.display = "inline";
+    stockDelete.className = "glyphicon glyphicon-remove stock-remove";
     
     stockTicker.appendChild(stockDelete);
-    stockTicker.style.marginLeft = "5px";
-    stockTicker.style.marginRight = "5px";
     var x = document.getElementById("stock-tickers");
     x.appendChild(stockTicker);
+}
 
-    // $('#stock-tickers').append($('<div>').text(stock));
-    
+function removeStockTickerFromDom(stock){
+    var temp = stock.slice(4);
+    // alert(temp);
+    $("#stock-"+temp).remove();
 }
 
 function getChartData(){

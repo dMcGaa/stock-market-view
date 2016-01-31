@@ -1,0 +1,16 @@
+.stock-item{
+    border: 1px hidden black;
+    display: inline;
+    margin-right: 5px;
+    margin-left: 5px;
+    padding: 1px;
+}
+.stock-item:hover{
+    border: 1px dotted black;
+    border-radius: 3px;
+    padding: 0px;
+}
+
+.stock-remove:hover{
+    color: red;
+}
