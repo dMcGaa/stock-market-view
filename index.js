@@ -2,6 +2,7 @@ require('dotenv').load(); //for loading the .env variables that connect to the m
 var express = require('express');
 var app = express();
 // var app = require('express')();
+// var io = require("socket.io")(app);
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
 var MongoClient = require('mongodb').MongoClient,
@@ -18,6 +19,7 @@ var dbConn; //global variable for database connection (connect once)
 //Initial DB connection at startup
 mongoConnect();
 
+// app.set('port', 8080);
 app.set('port', (process.env.PORT || 5000));
 
 //directory for serving static files (CSS, client JS)
@@ -59,9 +61,15 @@ io.on('connection', function(socket) {
   });
 });
 
-http.listen(8080, function() {
-  console.log('listening on *:8080');
+// http.listen(8080, function() {
+//   console.log('listening on *:8080');
+// });
+http.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
+// app.listen(8080, function() {
+//   console.log('app listening on *:8080');
+// });
 
 // app.listen(app.get('port'), function() {
 //   console.log('Node app is running on port', app.get('port'));
