@@ -21,9 +21,13 @@ $(document).ready(function() {
   socket.on('new stock', function(stock){
     addStockTicker(stock);
   });
+  socket.on("delete stock", function(stock){
+      //removeStockTickerFromData(); //TODO, with success removing from DOM
+      removeStockTickerFromDom(stock);
+  });
   $(document).on("click", ".stock-remove", function(){  //delegated event
-    //   alert("remove: " + this.id);
-      removeStockTickerFromDom(this.id);
+      var temp = this.id.slice(4);
+      socket.emit("untrack stock", temp);
   });
 })
 
@@ -43,9 +47,7 @@ function addStockTicker(stock){
 }
 
 function removeStockTickerFromDom(stock){
-    var temp = stock.slice(4);
-    // alert(temp);
-    $("#stock-"+temp).remove();
+    $("#stock-"+stock).remove();
 }
 
 function getChartData(){

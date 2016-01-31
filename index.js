@@ -50,8 +50,12 @@ io.on('connection', function(socket) {
     io.emit('chat message', msg);
   });
   socket.on('track stock', function(msg) {
-    console.log('stock: ' + msg);
+    console.log('track stock: ' + msg);
     io.emit('new stock', msg);
+  });
+  socket.on('untrack stock', function(msg) {
+    console.log('untrack stock: ' + msg);
+    io.emit('delete stock', msg);
   });
 });
 
