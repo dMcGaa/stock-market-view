@@ -24,7 +24,24 @@ $(document).ready(function() {
 })
 
 function addStockTicker(stock){
-    $('#stock-tickers').append($('<div>').text(stock));
+    var stockTicker = document.createElement("div");
+    stockTicker.id = stock;
+    stockTicker.innerHTML = stock;
+    stockTicker.style.display = "inline";
+    
+    var stockDelete = document.createElement("button");
+    stockDelete.id = "del-" + stock;
+    stockDelete.innerHTML = "del";
+    stockDelete.style.display = "inline";
+    
+    stockTicker.appendChild(stockDelete);
+    stockTicker.style.marginLeft = "5px";
+    stockTicker.style.marginRight = "5px";
+    var x = document.getElementById("stock-tickers");
+    x.appendChild(stockTicker);
+
+    // $('#stock-tickers').append($('<div>').text(stock));
+    
 }
 
 function getChartData(){
