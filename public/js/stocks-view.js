@@ -1,7 +1,29 @@
+var chartData = {};
+
 $(document).ready(function() {
-    // var chartData = processData();
     var socket = io();
-    var chartData = getChartData();
+    chartData = getChartData();
+    createChart();
+  $('form').submit(function(){
+    socket.emit('track stock', $('#message-in').val());
+    $('#message-in').val('');
+    return false;
+  });
+  socket.on('new stock', function(stock){
+    addStockTickerToDom(stock);
+    addStockTickerToChart(stock);
+  });
+  socket.on("delete stock", function(stock){
+      removeStockTickerFromChart(stock); //TODO, with success trigger removing from DOM
+      removeStockTickerFromDom(stock);
+  });
+  $(document).on("click", ".stock-remove", function(){  //delegated event
+      var temp = this.id.slice(4);
+      socket.emit("untrack stock", temp);
+  });
+})
+
+function createChart(){
     var ctx = document.getElementById("chart-area").getContext("2d");
     window.myLineChart = new Chart(ctx).Line(chartData, {
         	showScale: true,
@@ -12,26 +34,10 @@ $(document).ready(function() {
         	pointDot : true,
         	datasetFill:false,
             responsive: true  //responsive will fit window
-        });
-  $('form').submit(function(){
-    socket.emit('track stock', $('#message-in').val());
-    $('#message-in').val('');
-    return false;
-  });
-  socket.on('new stock', function(stock){
-    addStockTicker(stock);
-  });
-  socket.on("delete stock", function(stock){
-      //removeStockTickerFromData(); //TODO, with success removing from DOM
-      removeStockTickerFromDom(stock);
-  });
-  $(document).on("click", ".stock-remove", function(){  //delegated event
-      var temp = this.id.slice(4);
-      socket.emit("untrack stock", temp);
-  });
-})
+    });
+}
 
-function addStockTicker(stock){
+function addStockTickerToDom(stock){
     var stockTicker = document.createElement("div");
     stockTicker.id = "stock-" + stock;
     stockTicker.innerHTML = stock;
@@ -45,9 +51,52 @@ function addStockTicker(stock){
     var x = document.getElementById("stock-tickers");
     x.appendChild(stockTicker);
 }
+function addStockTickerToChart(stock){
+    var newDataset = {
+      label: stock,
+      fillColor: "rgba(220,220,220,0.2)",
+      strokeColor: "rgba(220,220,220,1)",
+      pointColor: "rgba(220,220,220,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(220,220,220,1)",
+      data: []
+    };
+    var dataNum;
+    var datasetNum = [];
+    for (var i = 0; i<7; i++){
+        dataNum = Math.floor(Math.random()*100);
+        datasetNum.push(dataNum);
+    }
+    newDataset.data = datasetNum;
+    chartData.datasets.push(newDataset);
+    window.myLineChart.destroy();
+    createChart();
+}
 
 function removeStockTickerFromDom(stock){
     $("#stock-"+stock).remove();
+}
+function removeStockTickerFromChart(stock){
+    // alert(chartData.datasets.length);
+    var removeItem = findWithAttr(chartData.datasets, 'label', stock);
+    if(removeItem >= 0){
+        // alert("removing " + removeItem);
+        chartData.datasets.splice(removeItem, 1); //remove one item if found
+    }
+    // alert(chartData.datasets.length);
+    window.myLineChart.destroy();
+    createChart();
+}
+
+function findWithAttr(array, attr, value) {
+    for(var i = 0; i < array.length; i++) {
+        if(array[i][attr] === value) {
+            alert(i);
+            return i;
+        }
+    }
+    return -1;
 }
 
 function getChartData(){
