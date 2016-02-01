@@ -1,9 +1,13 @@
-var chartData = {};
+var chartData = {
+    labels: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    datasets: []
+};
 
 $(document).ready(function() {
     var socket = io();
     chartData = getChartData();
     createChart();
+    chartData.datasets = [];
   $('form').submit(function(){
     socket.emit('track stock', $('#message-in').val());
     $('#message-in').val('');
@@ -64,13 +68,24 @@ function addStockTickerToChart(stock){
     };
     var dataNum;
     var datasetNum = [];
-    for (var i = 0; i<7; i++){
+    var datasetLabel = [];
+    var oneLabel = "";
+    for (var i = 0; i<stock.data.length; i++){
         // dataNum = Math.floor(Math.random()*100);
         // datasetNum.push(dataNum);
-        console.log(stock.data[i]);
-        datasetNum.push(stock.data[i]["close"]);
+        // console.log(stock.data[i]);
+        if (stock.data.length > 30){
+            oneLabel = (i % 12 === 0) ? stock.data[i]["date"]:"";
+        } 
+        else{
+            oneLabel = stock.data[i]["date"];
+        }
+        // console.log(oneLabel);
+        datasetLabel.push(oneLabel);
+        datasetNum.push(stock.data[i]["close"].toFixed(2));
     }
     newDataset.data = datasetNum;
+    chartData.labels = datasetLabel;
     chartData.datasets.push(newDataset);
     window.myLineChart.destroy();
     createChart();
