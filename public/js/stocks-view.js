@@ -92,7 +92,7 @@ function removeStockTickerFromChart(stock){
 function findWithAttr(array, attr, value) {
     for(var i = 0; i < array.length; i++) {
         if(array[i][attr] === value) {
-            alert(i);
+            // alert(i);
             return i;
         }
     }
