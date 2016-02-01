@@ -1,8 +1,6 @@
 require('dotenv').load(); //for loading the .env variables that connect to the mongoDB
 var express = require('express');
 var app = express();
-// var app = require('express')();
-// var io = require("socket.io")(app);
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
 var MongoClient = require('mongodb').MongoClient,
@@ -55,7 +53,14 @@ io.on('connection', function(socket) {
   });
   socket.on('track stock', function(msg) {
     console.log('track stock: ' + msg);
-    io.emit('new stock', msg);
+    //stockDataOnClientRequest(msg);
+    stockDataOnClientConnect([msg], function(data){
+    var stockData = {
+      name: msg,
+      data: data[msg]
+    }
+    io.emit('new stock', stockData);
+    })
   });
   socket.on('untrack stock', function(msg) {
     console.log('untrack stock: ' + msg);
@@ -63,21 +68,9 @@ io.on('connection', function(socket) {
   });
 });
 
-// http.listen(8080, function() {
-//   console.log('listening on *:8080');
-// });
 http.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-// app.listen(8080, function() {
-//   console.log('app listening on *:8080');
-// });
-
-// app.listen(app.get('port'), function() {
-//   console.log('Node app is running on port', app.get('port'));
-// });
-
-
 
 // Connect using MongoClient
 function mongoConnect() {
@@ -94,18 +87,39 @@ var SYMBOLS = [
   'GOOGL',
   'YHOO'
 ];
+stockDataOnClientRequest("ASTI");
+// stockDataOnClientConnect(SYMBOLS);
 
-yahooFinance.historical({
-  symbols: SYMBOLS,
-  from: '2012-01-01',
-  to: '2012-12-31',
-  period: 'd'
-}, function (err, result) {
-  if (err) { throw err; }
-  console.log(typeof(result));
-  // console.log(result.length);
-  for(var prop in result) {
-    console.log(prop);
-  }
-  // console.log(JSON.stringify(result));
-});
+function stockDataOnClientConnect(SYMBOLS, callback){
+  yahooFinance.historical({
+    symbols: SYMBOLS,
+    from: '2015-01-01',
+    to: '2015-12-31',
+    period: 'd'
+  }, function (err, result) {
+    if (err) { throw err; }
+    console.log(typeof(result));
+    // console.log(result.length);
+    for(var prop in result) {
+      // console.log(prop);
+      console.log(JSON.stringify(result[prop])); //result:{"prop":[data]}
+      callback(result);
+    }
+  });
+}
+function stockDataOnClientRequest(SYMBOL){
+  yahooFinance.historical({
+    symbol: SYMBOL,
+    from: '2015-01-01',
+    to: '2015-12-31',
+    period: 'd'
+  }, function (err, result) {
+    if (err) { throw err; }
+    console.log(typeof(result));
+    // console.log(result.length);
+    for(var prop in result) {
+      // console.log(prop);
+      console.log(JSON.stringify(result[prop])); //result:{"prop":[data]}
+    }
+  });
+}

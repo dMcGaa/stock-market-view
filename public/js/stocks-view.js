@@ -9,9 +9,9 @@ $(document).ready(function() {
     $('#message-in').val('');
     return false;
   });
-  socket.on('new stock', function(stock){
-    addStockTickerToDom(stock);
-    addStockTickerToChart(stock);
+  socket.on('new stock', function(stockData){
+    addStockTickerToDom(stockData.name);
+    addStockTickerToChart(stockData);
   });
   socket.on("delete stock", function(stock){
       removeStockTickerFromChart(stock); //TODO, with success trigger removing from DOM
@@ -53,7 +53,7 @@ function addStockTickerToDom(stock){
 }
 function addStockTickerToChart(stock){
     var newDataset = {
-      label: stock,
+      label: stock.name,
       fillColor: "rgba(220,220,220,0.2)",
       strokeColor: "rgba(220,220,220,1)",
       pointColor: "rgba(220,220,220,1)",
@@ -65,8 +65,10 @@ function addStockTickerToChart(stock){
     var dataNum;
     var datasetNum = [];
     for (var i = 0; i<7; i++){
-        dataNum = Math.floor(Math.random()*100);
-        datasetNum.push(dataNum);
+        // dataNum = Math.floor(Math.random()*100);
+        // datasetNum.push(dataNum);
+        console.log(stock.data[i]);
+        datasetNum.push(stock.data[i]["close"]);
     }
     newDataset.data = datasetNum;
     chartData.datasets.push(newDataset);
