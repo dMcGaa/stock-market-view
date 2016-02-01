@@ -14,6 +14,7 @@ $(document).ready(function() {
     return false;
   });
   socket.on('new stock', function(stockData){
+    console.log(stockData);
     addStockTickerToDom(stockData.name);
     addStockTickerToChart(stockData);
   });
@@ -70,23 +71,26 @@ function addStockTickerToChart(stock){
     var datasetNum = [];
     var datasetLabel = [];
     var oneLabel = "";
-    for (var i = 0; i<stock.data.length; i++){
-        // dataNum = Math.floor(Math.random()*100);
-        // datasetNum.push(dataNum);
-        // console.log(stock.data[i]);
-        if (stock.data.length > 30){
-            oneLabel = (i % 12 === 0) ? stock.data[i]["date"]:"";
-        } 
-        else{
-            oneLabel = stock.data[i]["date"];
+    
+    if(stock.data.length > 1){
+        for (var i = 0; i<stock.data.length; i++){
+            // dataNum = Math.floor(Math.random()*100);
+            // datasetNum.push(dataNum);
+            // console.log(stock.data[i]);
+            if (stock.data.length > 30){
+                oneLabel = (i % 12 === 0) ? stock.data[i]["date"]:"";
+            } 
+            else{
+                oneLabel = stock.data[i]["date"];
+            }
+            // console.log(oneLabel);
+            datasetLabel.push(oneLabel);
+            datasetNum.push(stock.data[i]["close"].toFixed(2));
         }
-        // console.log(oneLabel);
-        datasetLabel.push(oneLabel);
-        datasetNum.push(stock.data[i]["close"].toFixed(2));
+        newDataset.data = datasetNum;
+        chartData.labels = datasetLabel;
+        chartData.datasets.push(newDataset);
     }
-    newDataset.data = datasetNum;
-    chartData.labels = datasetLabel;
-    chartData.datasets.push(newDataset);
     window.myLineChart.destroy();
     createChart();
 }

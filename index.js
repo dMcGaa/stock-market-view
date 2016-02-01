@@ -87,7 +87,7 @@ var SYMBOLS = [
   'GOOGL',
   'YHOO'
 ];
-stockDataOnClientRequest("ASTI");
+// stockDataOnClientRequest("ASTI");
 // stockDataOnClientConnect(SYMBOLS);
 
 function stockDataOnClientConnect(SYMBOLS, callback){
