@@ -9,6 +9,8 @@ var MongoClient = require('mongodb').MongoClient,
   test = require('assert'); //for testing the DB connection
 var ObjectId = require('mongodb').ObjectId; //referencing items by "_id" in DB
 
+var yahooFinance = require('yahoo-finance');
+
 
 // Connection url (MongoDB info)
 var userName = process.env.MONGOLAB_USER || "null";
@@ -85,3 +87,25 @@ function mongoConnect() {
     // db.close();  //no need to close, let application termination handle this
   });
 }
+
+var SYMBOLS = [
+  'AAPL',
+  'AMZN',
+  'GOOGL',
+  'YHOO'
+];
+
+yahooFinance.historical({
+  symbols: SYMBOLS,
+  from: '2012-01-01',
+  to: '2012-12-31',
+  period: 'd'
+}, function (err, result) {
+  if (err) { throw err; }
+  console.log(typeof(result));
+  // console.log(result.length);
+  for(var prop in result) {
+    console.log(prop);
+  }
+  // console.log(JSON.stringify(result));
+});
